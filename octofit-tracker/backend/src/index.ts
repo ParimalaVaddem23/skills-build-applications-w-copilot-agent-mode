@@ -21,6 +21,14 @@ export function createApp() {
     ? `https://${codespaceName}-8000.app.github.dev`
     : 'http://localhost:8000';
 
+  app.get('/', (_req: Request, res: Response) => {
+    res.json({
+      message: 'Octofit Tracker API',
+      apiBaseUrl,
+      endpoints: ['/api/health', '/api/users/', '/api/teams/', '/api/activities/', '/api/leaderboard/', '/api/workouts/'],
+    });
+  });
+
   app.get('/api/health', (_req: Request, res: Response) => {
     res.json({ status: 'ok', apiBaseUrl });
   });

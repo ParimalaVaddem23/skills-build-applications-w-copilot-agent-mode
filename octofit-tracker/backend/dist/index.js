@@ -22,6 +22,13 @@ function createApp() {
     const apiBaseUrl = codespaceName
         ? `https://${codespaceName}-8000.app.github.dev`
         : 'http://localhost:8000';
+    app.get('/', (_req, res) => {
+        res.json({
+            message: 'Octofit Tracker API',
+            apiBaseUrl,
+            endpoints: ['/api/health', '/api/users/', '/api/teams/', '/api/activities/', '/api/leaderboard/', '/api/workouts/'],
+        });
+    });
     app.get('/api/health', (_req, res) => {
         res.json({ status: 'ok', apiBaseUrl });
     });

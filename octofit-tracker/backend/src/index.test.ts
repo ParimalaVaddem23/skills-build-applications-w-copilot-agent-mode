@@ -3,6 +3,36 @@ import assert from 'node:assert/strict';
 import mongoose from 'mongoose';
 import { createApp } from './index';
 
+test('GET / returns API information', async () => {
+  const app = createApp();
+  const server = app.listen(0);
+
+  await new Promise<void>((resolve) => {
+    server.once('listening', resolve);
+  });
+
+  const address = server.address();
+  if (!address || typeof address === 'string') {
+    throw new Error('Server did not bind to a port');
+  }
+
+  const response: Response = await fetch(`http://127.0.0.1:${address.port}/`);
+  const body = await response.json();
+
+  assert.equal(response.status, 200);
+  assert.equal(body.message, 'Octofit Tracker API');
+
+  await new Promise<void>((resolve, reject) => {
+    server.close((error) => {
+      if (error) {
+        reject(error);
+      } else {
+        resolve();
+      }
+    });
+  });
+});
+
 test('seeded API routes return data', async () => {
   await mongoose.connect('mongodb://localhost:27017/octofit_db');
 
